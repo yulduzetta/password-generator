@@ -4,11 +4,6 @@ const upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const numbers = "0123456789";
 const specialChars = `!"#$%&'()*+,-./:;<=>?@[\]^_\`{|}~`;
 
-var passwordPrefences = {
-  length: 0,
-  rules: [],
-};
-
 // Set password length
 function setPasswordLength() {
   const regex = /^\d+$/;
@@ -39,18 +34,18 @@ function setPasswordLength() {
         alert(
           `The provided length of ${userInput} is not within the expected range ${min}-${max}. Let's try again!`
         );
-        setPasswordLength();
+        return setPasswordLength();
       } else {
         passwordLength = userInput;
+        return passwordLength;
       }
     } else {
       alert(
         `The provided input "${userInput}" does not meet the criteria: ${min}-${max}. Let's try again!`
       );
-      setPasswordLength();
+      return setPasswordLength();
     }
   }
-  return passwordLength;
 }
 // Set password rules based on user preferences.
 function setPasswordRules() {
@@ -82,35 +77,31 @@ function setPasswordRules() {
   return passwordRules;
 }
 // Generate random password based on the criteria defined by a user
-function generatePassword(passwordPrefences) {
+function generatePassword(passwordLength, passwordRules) {
   var password = "";
-  for (var i = 0; i < passwordPrefences.length; i++) {
-    var randomRuleIndex = Math.floor(
-      Math.random() * passwordPrefences.rules.length
-    );
-    password += passwordPrefences.rules[randomRuleIndex].charAt(
-      Math.floor(
-        Math.random() * passwordPrefences.rules[randomRuleIndex].length
-      )
+  for (var i = 0; i < passwordLength; i++) {
+    var randomRuleIndex = Math.floor(Math.random() * passwordRules.length);
+    password += passwordRules[randomRuleIndex].charAt(
+      Math.floor(Math.random() * passwordRules[randomRuleIndex].length)
     );
   }
   return password;
 }
 // Write generated password to the #password input
 function writePassword() {
+  var passwordLength;
+  var passwordRules = [];
   var passwordTextInputField = document.querySelector("#password");
 
   alert("Welcome! Let's generate your password!");
-  passwordPrefences.length = setPasswordLength();
+  passwordLength = setPasswordLength();
+  console.log(passwordLength);
 
-  if (
-    passwordPrefences.length === 0 ||
-    typeof passwordPrefences.length === "undefined"
-  ) {
+  if (passwordLength === 0 || typeof passwordLength === "undefined") {
     return;
   } else {
-    passwordPrefences.rules = setPasswordRules(password);
-    var password = generatePassword(passwordPrefences);
+    passwordRules = setPasswordRules();
+    var password = generatePassword(passwordLength, passwordRules);
     passwordTextInputField.value = password;
   }
 }
