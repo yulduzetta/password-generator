@@ -4,6 +4,11 @@ const upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 const numbers = "0123456789";
 const specialChars = `!"#$%&'()*+,-./:;<=>?@[\]^_\`{|}~`;
 
+var passwordPrefences = {
+  length: 0,
+  composition: [],
+};
+
 // Set password length
 function setPasswordLength() {
   const regex = /^\d+$/;
@@ -15,8 +20,9 @@ function setPasswordLength() {
   var userInput = prompt(
     `Choose how long should your password be between ${min}-${max} or press 'OK' to default to a random password length`
   );
+  console.log(userInput );
 
-  if (userInput === 0 || typeof userInput === "undefined") {
+  if (userInput === null || typeof userInput === "undefined") {
     alert("Sorry to see you go!");
     return;
   } else if (userInput === "") {
@@ -66,7 +72,7 @@ function setPasswordComposition() {
     passwordCompositionPreferences.push(specialChars);
   }
   if (passwordCompositionPreferences.length === 0) {
-    alert("At least one rule needs to be applied, please try again");
+    alert("At least one rule needs to be applied, please try again from the beginning");
     return;
   }
   return passwordCompositionPreferences;
@@ -88,11 +94,6 @@ function generatePassword(passwordPrefences) {
 }
 // Write generated password to the #password input
 function writePassword() {
-  var passwordPrefences = {
-    length: 0,
-    composition: [],
-  };
-
   var passwordTextInputField = document.querySelector("#password");
 
   alert("Welcome! Let's generate your password!");
