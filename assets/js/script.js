@@ -6,7 +6,7 @@ const specialChars = `!"#$%&'()*+,-./:;<=>?@[\]^_\`{|}~`;
 
 var passwordPrefences = {
   length: 0,
-  composition: [],
+  rules: [],
 };
 
 // Set password length
@@ -20,7 +20,6 @@ function setPasswordLength() {
   var userInput = prompt(
     `Choose how long should your password be between ${min}-${max} or press 'OK' to default to a random password length`
   );
-  console.log(userInput );
 
   if (userInput === null || typeof userInput === "undefined") {
     alert("Sorry to see you go!");
@@ -29,7 +28,10 @@ function setPasswordLength() {
     passwordLength = Math.floor(
       Math.random() * (Math.floor(max) - Math.ceil(min) + 1) + min
     );
-    alert(`Your password length has been set to random number: ${passwordLength}`)
+    alert(
+      `Your password length has been set to random number: ${passwordLength}`
+    );
+    return passwordLength;
   } else {
     if (userInput.match(regex)) {
       userInput = parseInt(userInput);
@@ -50,43 +52,45 @@ function setPasswordLength() {
   }
   return passwordLength;
 }
-// Set password composition based on user preferences.
-function setPasswordComposition() {
+// Set password rules based on user preferences.
+function setPasswordRules() {
   var userInput;
-  var passwordCompositionPreferences = [];
+  var passwordRules = [];
 
   userInput = confirm("Should password contain LOWERCASE letters?");
   if (userInput) {
-    passwordCompositionPreferences.push(lowerCaseLetters);
+    passwordRules.push(lowerCaseLetters);
   }
   userInput = confirm("Should password contain UPPERCASE letters?");
   if (userInput) {
-    passwordCompositionPreferences.push(upperCaseLetters);
+    passwordRules.push(upperCaseLetters);
   }
   userInput = confirm("Should password contain NUMBERS?");
   if (userInput) {
-    passwordCompositionPreferences.push(numbers);
+    passwordRules.push(numbers);
   }
   userInput = confirm("Should password contain SPECIAL CHARACTERS?");
   if (userInput) {
-    passwordCompositionPreferences.push(specialChars);
+    passwordRules.push(specialChars);
   }
-  if (passwordCompositionPreferences.length === 0) {
-    alert("At least one rule needs to be applied, please try again from the beginning");
+  if (passwordRules.length === 0) {
+    alert(
+      "At least one rule needs to be applied, please try again from the beginning"
+    );
     return;
   }
-  return passwordCompositionPreferences;
+  return passwordRules;
 }
 // Generate random password based on the criteria defined by a user
 function generatePassword(passwordPrefences) {
   var password = "";
   for (var i = 0; i < passwordPrefences.length; i++) {
-    var randomStringIndex = Math.floor(
-      Math.random() * passwordPrefences.composition.length
+    var randomRuleIndex = Math.floor(
+      Math.random() * passwordPrefences.rules.length
     );
-    password += passwordPrefences.composition[randomStringIndex].charAt(
+    password += passwordPrefences.rules[randomRuleIndex].charAt(
       Math.floor(
-        Math.random() * passwordPrefences.composition[randomStringIndex].length
+        Math.random() * passwordPrefences.rules[randomRuleIndex].length
       )
     );
   }
@@ -98,7 +102,6 @@ function writePassword() {
 
   alert("Welcome! Let's generate your password!");
   passwordPrefences.length = setPasswordLength();
-  console.log(passwordPrefences.length);
 
   if (
     passwordPrefences.length === 0 ||
@@ -106,7 +109,7 @@ function writePassword() {
   ) {
     return;
   } else {
-    passwordPrefences.composition = setPasswordComposition(password);
+    passwordPrefences.rules = setPasswordRules(password);
     var password = generatePassword(passwordPrefences);
     passwordTextInputField.value = password;
   }
