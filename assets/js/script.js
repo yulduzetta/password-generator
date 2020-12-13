@@ -67,7 +67,7 @@ function setPasswordComposition() {
   }
   if (passwordCompositionPreferences.length === 0) {
     alert("At least one rule needs to be applied, please try again");
-    setPasswordComposition();
+    return;
   }
   return passwordCompositionPreferences;
 }
